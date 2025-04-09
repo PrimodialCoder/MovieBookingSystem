@@ -3,6 +3,8 @@ package Mapper;
 import Entity.Movie;
 import dto.MovieDto;
 
+import java.time.LocalDate;
+
 public class MovieMapper {
     public static MovieDto convertToMovieDto(Movie movie) {
         return new MovieDto(
@@ -15,7 +17,7 @@ public class MovieMapper {
                 movie.getDuration()
         );
     }
-    public static Movie convertToMovieEntity(MovieDto movieDto) {
+     public static Movie convertToMovie(MovieDto movieDto) {
         return new Movie(
                 movieDto.getId(),
                 movieDto.getName(),
@@ -25,5 +27,5 @@ public class MovieMapper {
                 movieDto.getReleaseDate(),
                 movieDto.getDuration()
         );
-    }
+     }
 }

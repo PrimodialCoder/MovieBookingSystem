@@ -19,16 +19,23 @@ public class MovieController {
 
     @PostMapping("/addmovie")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Movie> addMovie(@RequestBody MovieDto movieDto) {
+    //build REST API to create an entry in database it will take the request body and convert it to MovieDto object and send it to the service layer's addMovie method
+    public ResponseEntity<MovieDto> addMovie(@RequestBody MovieDto movieDto) {
         return ResponseEntity.ok(movieService.addMovie(movieDto));
 
     }
 
+    //Build REST API to get all the movies saved in the database in the form of ListDto
     @GetMapping("/getallmovies")
-    public ResponseEntity<List<Movie>> getAllMovies() {
-        return ResponseEntity.ok(movieService.getAllMovies());
+    public ResponseEntity<List<MovieDto>> getAllMovies() {
+        List<MovieDto> allMovies = movieService.getAllMovies();
+        if(allMovies.isEmpty()) {
+            return ResponseEntity.noContent().build(); // Return 204 No Content if the list is empty
+        }
+        return ResponseEntity.ok(allMovies);
     }
 
+    //
     @GetMapping("/getmoviebygenre")
     public ResponseEntity<List<Movie>> getAllMoviesByGenre(@RequestParam String genre) {
         return ResponseEntity.ok(movieService.getMovieByGenre(genre));
@@ -40,7 +47,7 @@ public class MovieController {
     }
 
     @GetMapping("/getmoviebytitle")
-    public ResponseEntity<List<Movie>> getAllMoviesByTitle(@RequestParam String title) {
+    public ResponseEntity<Movie> getMovieByTitle(@RequestParam String title) {
         return ResponseEntity.ok(movieService.getMovieByTitle(title));
     }
 
@@ -51,7 +58,7 @@ public class MovieController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/deletemovie/{id}")
+    @DeleteMapping("/movie/{id}")
     public ResponseEntity<Void> deleteMovie(@PathVariable long id) {
         movieService.deleteMovie(id);
         return ResponseEntity.ok().build();
